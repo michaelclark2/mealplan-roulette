@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { Navbar, Heading } from "react-bulma-components";
+import { Link } from "react-router-dom";
 
 const NavBar = (props) => {
   const [active, setActive] = useState(false);
@@ -15,9 +16,23 @@ const NavBar = (props) => {
       </Navbar.Brand>
       <Navbar.Menu className={active ? "is-active" : ""}>
         <Navbar.Container>
-          <Navbar.Item onClick={() => setActive(false)}>Home</Navbar.Item>
-          <Navbar.Item onClick={() => setActive(false)}>Meal Plans</Navbar.Item>
-          <Navbar.Item onClick={() => setActive(false)}>Settings</Navbar.Item>
+          <Navbar.Item renderAs={Link} to="/" onClick={() => setActive(false)}>
+            Home
+          </Navbar.Item>
+          <Navbar.Item
+            renderAs={Link}
+            to="/mealplans"
+            onClick={() => setActive(false)}
+          >
+            Meal Plans
+          </Navbar.Item>
+          <Navbar.Item
+            renderAs={Link}
+            to="/settings"
+            onClick={() => setActive(false)}
+          >
+            Settings
+          </Navbar.Item>
         </Navbar.Container>
       </Navbar.Menu>
     </Navbar>
