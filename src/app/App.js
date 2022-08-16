@@ -1,12 +1,14 @@
-import { Button } from 'react-bulma-components';
-import './App.css';
+import { Button } from "react-bulma-components";
+import NavBar from "../components/NavBar/NavBar";
+import "./App.css";
 
-function App() {
+const App = (props) => {
   return (
     <div className="App">
-        <Button color="primary">Bulma</Button>
+      <NavBar />
+      <Button color="primary">Bulma</Button>
     </div>
   );
-}
+};
 
 export default App;
