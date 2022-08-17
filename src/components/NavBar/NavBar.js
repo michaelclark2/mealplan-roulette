@@ -6,15 +6,18 @@ const NavBar = (props) => {
   const [active, setActive] = useState(false);
 
   const toggleActive = () => setActive(!active);
+
+  const activeClassName = active ? "is-active" : "";
+
   return (
     <Navbar color="primary">
       <Navbar.Brand>
         <Navbar.Item renderAs="div">
           <Heading>Meal Plan Roulette</Heading>
         </Navbar.Item>
-        <Navbar.Burger onClick={toggleActive} />
+        <Navbar.Burger className={activeClassName} onClick={toggleActive} />
       </Navbar.Brand>
-      <Navbar.Menu className={active ? "is-active" : ""}>
+      <Navbar.Menu className={activeClassName}>
         <Navbar.Container>
           <Navbar.Item renderAs={Link} to="/" onClick={() => setActive(false)}>
             Home
