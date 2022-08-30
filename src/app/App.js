@@ -1,12 +1,23 @@
-import { Button } from 'react-bulma-components';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MealPlansScreen from "../screens/MealPlansScreen";
+import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
+import SettingsScreen from "../screens/SettingsScreen";
+import SplashScreen from "../screens/SplashScreen";
+import "./App.css";
 
-function App() {
+const App = (props) => {
   return (
     <div className="App">
-        <Button color="primary">Bulma</Button>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SplashScreen />} />
+          <Route path="/roulette" element={<RecipeRouletteScreen />} />
+          <Route path="/mealplans" element={<MealPlansScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
-}
+};
 
 export default App;
