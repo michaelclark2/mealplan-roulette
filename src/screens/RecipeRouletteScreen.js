@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import {
   Button,
   Container,
@@ -7,8 +7,11 @@ import {
   Columns,
 } from "react-bulma-components";
 import RecipeCard from "../components/RecipeCard/RecipeCard";
+import { getRandomRecipeUrl } from "../utils/api";
 
 const RecipeRouletteScreen = (props) => {
+  console.log(getRandomRecipeUrl());
+
   return (
     <Hero size="fullheight">
       <Hero.Header textAlign="center">
