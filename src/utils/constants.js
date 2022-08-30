@@ -1,5 +1,3 @@
 const SPOONACULAR_APIKEY = process.env.REACT_APP_SPOONACULAR_APIKEY;
 
-console.log(SPOONACULAR_APIKEY);
-
 export default { SPOONACULAR_APIKEY };

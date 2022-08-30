@@ -1,20 +1,16 @@
 import React from "react";
 import { Box, Image, Heading, Columns } from "react-bulma-components";
 
-const RecipeCard = (props) => {
+const RecipeCard = ({ recipe }) => {
   return (
     <Box>
       <Columns desktop={{ display: "inline" }} mobile={{ display: "flex" }}>
         <Columns.Column>
-          <Image src="https://whatsfordinner.net/images/Vegetable-Farfalle-with-Chicken-and-Tomatoes.jpg" />
+          <Image src={recipe.image} />
         </Columns.Column>
         <Columns.Column>
-          <Heading
-            renderAs="a"
-            size="4"
-            href="https://whatsfordinner.net/Vegetable-Farfalle-with-Chicken-and-Tomatoes.html"
-          >
-            Vegetable Farfalle with Chicken and Tomatoes
+          <Heading renderAs="a" size="5" href={recipe.sourceUrl}>
+            {recipe.title}
           </Heading>
         </Columns.Column>
       </Columns>
