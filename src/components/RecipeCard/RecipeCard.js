@@ -1,10 +1,15 @@
 import React from "react";
 import { Box, Image, Heading, Columns } from "react-bulma-components";
+import "./RecipeCard.css";
 
 const RecipeCard = ({ recipe }) => {
   return (
-    <Box>
-      <Columns desktop={{ display: "inline" }} mobile={{ display: "flex" }}>
+    <Box className="RecipeCard">
+      <Columns
+        desktop={{ display: "inline", gap: 0 }}
+        mobile={{ display: "flex", gap: 1 }}
+        vCentered={true}
+      >
         <Columns.Column>
           <Image src={recipe.image} />
         </Columns.Column>
