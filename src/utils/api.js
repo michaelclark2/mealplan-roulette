@@ -4,6 +4,7 @@ const getRandomRecipeUrl = (numberOfRecipes = 1) => {
   const url = new URL("https://api.spoonacular.com/recipes/random");
   url.searchParams.set("apiKey", constants.SPOONACULAR_APIKEY);
   url.searchParams.set("number", numberOfRecipes);
+  url.searchParams.set("tags", "main course");
   return url.toString();
 };
 
