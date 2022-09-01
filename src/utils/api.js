@@ -5,7 +5,7 @@ const getRandomRecipeUrl = (numberOfRecipes = 1) => {
     number: numberOfRecipes,
     addRecipeInformation: true,
     sort: "random",
-    type: "main course,dinner,side dish",
+    type: "main course,side dish,appetizer",
   };
   const params = {
     apiKey: constants.SPOONACULAR_APIKEY,
