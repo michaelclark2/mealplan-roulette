@@ -14,7 +14,12 @@ const RecipeCard = ({ recipe }) => {
           <Image src={recipe.image} />
         </Columns.Column>
         <Columns.Column>
-          <Heading renderAs="a" size="5" href={recipe.sourceUrl}>
+          <Heading
+            renderAs="a"
+            size="5"
+            href={recipe.sourceUrl}
+            target="_blank"
+          >
             {recipe.title}
           </Heading>
         </Columns.Column>
