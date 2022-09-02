@@ -66,7 +66,8 @@ const RecipeRouletteScreen = (props) => {
       <Hero.Body alignItems="start">
         <Container>
           <Columns justifyContent="center">
-            {recipes && recipes.length ? (
+            {(recipes && recipes.length) ||
+            (pinnedRecipes && pinnedRecipes.length) ? (
               [...pinnedRecipes, ...recipes].map((recipe) => {
                 return (
                   <Columns.Column key={recipe.id} size="one-quarter">

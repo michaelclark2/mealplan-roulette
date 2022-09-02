@@ -9,7 +9,7 @@ const RecipeCard = ({ recipe, togglePinRecipe }) => {
       className="RecipeCard"
       style={{
         position: "relative",
-        border: recipe.isPinned ? "2px solid blue" : "",
+        border: recipe.isPinned ? "2px solid #209CEE" : "",
       }}
       onClick={() => togglePinRecipe(recipe.id)}
     >
@@ -21,7 +21,7 @@ const RecipeCard = ({ recipe, togglePinRecipe }) => {
         <Columns.Column>
           {recipe.isPinned ? (
             <Icon overlay={true}>
-              <LockIcon fill="blue" />
+              <LockIcon fill="#209CEE" />
             </Icon>
           ) : (
             ""
