@@ -1,19 +1,16 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Image,
-  Icon,
-  Button,
-  Heading,
-  Columns,
-} from "react-bulma-components";
+import React from "react";
+import { Box, Image, Icon, Heading, Columns } from "react-bulma-components";
 import "./RecipeCard.css";
+import { ReactComponent as LockIcon } from "../../assets/icons/lock.svg";
 
 const RecipeCard = ({ recipe, togglePinRecipe }) => {
   return (
     <Box
       className="RecipeCard"
-      style={{ position: "relative" }}
+      style={{
+        position: "relative",
+        border: recipe.isPinned ? "2px solid blue" : "",
+      }}
       onClick={() => togglePinRecipe(recipe.id)}
     >
       <Columns
@@ -23,8 +20,8 @@ const RecipeCard = ({ recipe, togglePinRecipe }) => {
       >
         <Columns.Column>
           {recipe.isPinned ? (
-            <Icon overlay={true} backgroundColor="primary">
-              X
+            <Icon overlay={true}>
+              <LockIcon fill="blue" />
             </Icon>
           ) : (
             ""
@@ -37,6 +34,7 @@ const RecipeCard = ({ recipe, togglePinRecipe }) => {
             size="5"
             href={recipe.sourceUrl}
             target="_blank"
+            onClick={(e) => e.stopPropagation()}
           >
             {recipe.title}
           </Heading>
