@@ -6,12 +6,15 @@ import {
   Hero,
   Columns,
 } from "react-bulma-components";
-import RecipeCard from "../components/RecipeCard/RecipeCard";
+import RecipeCard, {
+  RecipeSpinnerCard,
+} from "../components/RecipeCard/RecipeCard";
 import { getRandomRecipes } from "../utils/api";
 
 const RecipeRouletteScreen = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [pinnedRecipes, setPinnedRecipes] = useState([]);
+  const [isSpinning, setIsSpinning] = useState(false);
 
   const pinRecipe = (recipe) => {
     recipes.splice(recipes.indexOf(recipe), 1);
@@ -45,13 +48,39 @@ const RecipeRouletteScreen = (props) => {
   };
 
   const getRecipes = () => {
+    setIsSpinning(true);
+    setRecipes([]);
     getRandomRecipes(7 - pinnedRecipes.length)
       .then((recipes) => setRecipes(recipes))
       .catch((err) => {
         console.error(err);
         // TODO: add error alert to dom
+      })
+      .finally(() => {
+        setIsSpinning(false);
       });
   };
+
+  const hasRecipes =
+    (recipes && recipes.length) || (pinnedRecipes && pinnedRecipes.length);
+
+  const makeRecipeCards = (recipe) => {
+    return (
+      <Columns.Column key={recipe.id} size="one-quarter">
+        <RecipeCard recipe={recipe} togglePinRecipe={togglePinRecipe} />
+      </Columns.Column>
+    );
+  };
+
+  const pinnedRecipeCards = pinnedRecipes.map(makeRecipeCards);
+
+  const recipeCards = recipes.map(makeRecipeCards);
+
+  const spinnerCards = Array(7 - pinnedRecipes.length).fill(
+    <Columns.Column size="one-quarter">
+      <RecipeSpinnerCard />
+    </Columns.Column>
+  );
 
   return (
     <Hero size="fullheight">
@@ -59,26 +88,24 @@ const RecipeRouletteScreen = (props) => {
         <Heading p={3} textSize={1} textTransform="uppercase">
           Meal Plan Roulette
         </Heading>
-        <Button color="primary" onClick={() => getRecipes()}>
+
+        <Button
+          color="primary"
+          disabled={isSpinning ? true : false}
+          onClick={() => getRecipes()}
+        >
           SPIN
         </Button>
       </Hero.Header>
       <Hero.Body alignItems="start">
         <Container>
           <Columns justifyContent="center">
-            {(recipes && recipes.length) ||
-            (pinnedRecipes && pinnedRecipes.length) ? (
-              [...pinnedRecipes, ...recipes].map((recipe) => {
-                return (
-                  <Columns.Column key={recipe.id} size="one-quarter">
-                    <RecipeCard
-                      recipe={recipe}
-                      togglePinRecipe={togglePinRecipe}
-                    />
-                  </Columns.Column>
-                );
-              })
-            ) : (
+            {hasRecipes ? (
+              [
+                ...pinnedRecipeCards,
+                ...(isSpinning ? spinnerCards : recipeCards),
+              ]
+            ) : isSpinning ? null : (
               <Heading>Click "Spin" to start meal planning</Heading>
             )}
           </Columns>
