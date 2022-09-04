@@ -105,7 +105,9 @@ const RecipeRouletteScreen = (props) => {
                 ...pinnedRecipeCards,
                 ...(isSpinning ? spinnerCards : recipeCards),
               ]
-            ) : isSpinning ? null : (
+            ) : isSpinning ? (
+              spinnerCards
+            ) : (
               <Heading>Click "Spin" to start meal planning</Heading>
             )}
           </Columns>
