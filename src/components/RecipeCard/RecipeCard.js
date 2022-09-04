@@ -1,5 +1,13 @@
 import React from "react";
-import { Box, Image, Icon, Heading, Columns } from "react-bulma-components";
+import {
+  Box,
+  Image,
+  Icon,
+  Heading,
+  Columns,
+  Container,
+} from "react-bulma-components";
+import ClipLoader from "react-spinners/ClipLoader";
 import "./RecipeCard.css";
 import { ReactComponent as LockIcon } from "../../assets/icons/lock.svg";
 
@@ -39,6 +47,31 @@ const RecipeCard = ({ recipe, togglePinRecipe }) => {
             {recipe.title}
           </Heading>
         </Columns.Column>
+      </Columns>
+    </Box>
+  );
+};
+
+export const RecipeSpinnerCard = (props) => {
+  return (
+    <Box
+      className="RecipeCard is-flex is-align-items-center is-justify-content-center"
+      style={{
+        position: "relative",
+      }}
+    >
+      <Columns>
+        <Columns.Column
+          style={{ minHeight: "100px" }}
+          mobile={{ display: "hidden" }}
+        ></Columns.Column>
+        <Columns.Column size="full" textAlign="center">
+          <ClipLoader loading={true} size={100} />
+        </Columns.Column>
+        <Columns.Column
+          style={{ minHeight: "100px" }}
+          mobile={{ display: "hidden" }}
+        ></Columns.Column>
       </Columns>
     </Box>
   );
