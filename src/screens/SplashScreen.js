@@ -1,6 +1,5 @@
-import { React, useContext } from "react";
+import { React } from "react";
 import { Navigate } from "react-router-dom";
-import UserConfigContext from "../context/UserConfig";
 
 const SplashScreen = (props) => {
   // TODO: Redirect to settings if there is no settings saved
