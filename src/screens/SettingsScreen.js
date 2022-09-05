@@ -10,6 +10,16 @@ import {
 } from "react-bulma-components";
 import { useNavigate } from "react-router-dom";
 
+const SPOONACULAR_DIET_CHOICES = [
+  ["vegetarian", "Vegetarian"],
+  ["vegan", "Vegan"],
+  ["gluten-free", "Gluten Free"],
+  ["pescatarian", "Pescatarian"],
+  ["ketogenic", "Ketogenic"],
+  ["whole30", "Whole30"],
+  ["paleo", "Paleo"],
+];
+
 const SettingsScreen = (props) => {
   const [numberOfRecipes, setNumberOfRecipes] = useState(4);
   const [diets, setDiets] = useState([]);
@@ -18,11 +28,16 @@ const SettingsScreen = (props) => {
   useEffect(() => {
     const userSettings = JSON.parse(localStorage.getItem("settings"));
     setNumberOfRecipes(userSettings?.numberOfRecipes);
+    setDiets(userSettings?.diets);
   }, []);
 
   const handleDietChange = (e) => {
-    const value = e.target.name;
-    console.log(value);
+    const { checked, value } = e.target;
+    if (checked) {
+      setDiets([...diets.filter((d) => d !== value), value]);
+    } else {
+      setDiets([...diets.filter((d) => d !== value)]);
+    }
   };
 
   const handleFormSave = (e) => {
@@ -46,7 +61,7 @@ const SettingsScreen = (props) => {
         <Container>
           <Columns justifyContent="center">
             <Columns.Column size="three-fifths">
-              <Box backgroundColor="primary">
+              <Box>
                 <Form.Field className="is-horizontal">
                   <Form.Label mr="4">Number of Recipes in Meal Plan</Form.Label>
                   <Form.Control>
@@ -61,18 +76,22 @@ const SettingsScreen = (props) => {
               </Box>
             </Columns.Column>
             <Columns.Column size="three-fifths">
-              <Box backgroundColor="primary">
-                <Form.Field onChange={handleDietChange}>
-                  <Form.Label>Dietary Restrictions or Allergies</Form.Label>
+              <Box>
+                <Form.Field>
+                  <Form.Label>Diet Filters</Form.Label>
                   <Form.Control>
-                    <Form.Checkbox name="vegan" m="1">
-                      Vegan
-                    </Form.Checkbox>
-                    <Form.Checkbox name="vegetarian" m="1">
-                      Vegetarian
-                    </Form.Checkbox>
-                    <Form.Checkbox m="1">Gluten Free</Form.Checkbox>
-                    <Form.Checkbox m="1">Peanut</Form.Checkbox>
+                    {SPOONACULAR_DIET_CHOICES.map((choice) => {
+                      return (
+                        <Form.Checkbox
+                          checked={diets.includes(choice[0])}
+                          value={choice[0]}
+                          m="1"
+                          onChange={handleDietChange}
+                        >
+                          {choice[1]}
+                        </Form.Checkbox>
+                      );
+                    })}
                   </Form.Control>
                 </Form.Field>
               </Box>

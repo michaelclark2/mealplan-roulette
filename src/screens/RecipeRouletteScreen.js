@@ -55,7 +55,10 @@ const RecipeRouletteScreen = (props) => {
   const getRecipes = () => {
     setIsSpinning(true);
     setRecipes([]);
-    getRandomRecipes(userSettings?.numberOfRecipes - pinnedRecipes.length)
+    getRandomRecipes(
+      userSettings?.numberOfRecipes - pinnedRecipes.length,
+      userSettings
+    )
       .then((recipes) => setRecipes(recipes))
       .catch((err) => {
         console.error(err);
