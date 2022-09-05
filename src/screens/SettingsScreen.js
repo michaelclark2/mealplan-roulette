@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const SettingsScreen = (props) => {
-  const [numberOfRecipes, setNumberOfRecipes] = useState(7);
+  const [numberOfRecipes, setNumberOfRecipes] = useState(4);
   const [diets, setDiets] = useState([]);
   const navigate = useNavigate();
 
@@ -26,7 +26,10 @@ const SettingsScreen = (props) => {
   };
 
   const handleFormSave = (e) => {
-    localStorage.setItem("settings", JSON.stringify({ numberOfRecipes }));
+    localStorage.setItem(
+      "settings",
+      JSON.stringify({ numberOfRecipes, diets })
+    );
     props.setUserSettings({ numberOfRecipes, diets });
     navigate("/");
   };
@@ -51,7 +54,7 @@ const SettingsScreen = (props) => {
                       type="number"
                       value={numberOfRecipes}
                       max="7"
-                      onChange={(e) => setNumberOfRecipes(e.target.value)}
+                      onChange={(e) => setNumberOfRecipes(e.target.value * 1)}
                     />
                   </Form.Control>
                 </Form.Field>

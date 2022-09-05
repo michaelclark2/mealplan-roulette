@@ -6,7 +6,7 @@ import {
   Hero,
   Columns,
 } from "react-bulma-components";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import RecipeCard, {
   RecipeSpinnerCard,
 } from "../components/RecipeCard/RecipeCard";
@@ -17,6 +17,9 @@ const RecipeRouletteScreen = (props) => {
   const [pinnedRecipes, setPinnedRecipes] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const { userSettings } = props;
+
+  if (!userSettings || userSettings.numberOfRecipes === undefined)
+    return <Navigate to="/" />;
 
   const pinRecipe = (recipe) => {
     recipes.splice(recipes.indexOf(recipe), 1);
@@ -52,7 +55,7 @@ const RecipeRouletteScreen = (props) => {
   const getRecipes = () => {
     setIsSpinning(true);
     setRecipes([]);
-    getRandomRecipes(userSettings.numberOfRecipes - pinnedRecipes.length)
+    getRandomRecipes(userSettings?.numberOfRecipes - pinnedRecipes.length)
       .then((recipes) => setRecipes(recipes))
       .catch((err) => {
         console.error(err);
@@ -79,7 +82,7 @@ const RecipeRouletteScreen = (props) => {
   const recipeCards = recipes.map(makeRecipeCards);
 
   const spinnerCards = Array(
-    userSettings.numberOfRecipes - pinnedRecipes.length
+    userSettings?.numberOfRecipes - pinnedRecipes.length
   ).fill(
     <Columns.Column size="one-quarter">
       <RecipeSpinnerCard />
@@ -115,7 +118,9 @@ const RecipeRouletteScreen = (props) => {
             ) : isSpinning ? (
               spinnerCards
             ) : (
-              <Heading>Click "Spin" to start meal planning</Heading>
+              <Heading>
+                Click "Spin" for {userSettings.numberOfRecipes} random recipes
+              </Heading>
             )}
           </Columns>
         </Container>
