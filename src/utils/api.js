@@ -1,11 +1,13 @@
 import constants from "./constants";
 
-const getRandomRecipeUrl = (numberOfRecipes = 1) => {
+const getRandomRecipeUrl = (numberOfRecipes, userSettings) => {
   const config = {
     number: numberOfRecipes,
     addRecipeInformation: true,
     sort: "random",
-    type: "main course,side dish",
+    type: "main course",
+    diet: userSettings?.diets?.join(",").toString(),
+    intolerances: userSettings?.intolerances?.join(",").toString(),
   };
   const params = {
     apiKey: constants.SPOONACULAR_APIKEY,
@@ -19,9 +21,9 @@ const getRandomRecipeUrl = (numberOfRecipes = 1) => {
   return url.toString();
 };
 
-export const getRandomRecipes = (numberOfRecipes) => {
+export const getRandomRecipes = (numberOfRecipes, userSettings) => {
   return new Promise((resolve, reject) => {
-    fetch(getRandomRecipeUrl(numberOfRecipes))
+    fetch(getRandomRecipeUrl(numberOfRecipes, userSettings))
       .then((response) => {
         if (response.ok) {
           return response.json();

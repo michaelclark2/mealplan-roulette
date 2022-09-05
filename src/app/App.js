@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MealPlansScreen from "../screens/MealPlansScreen";
 import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
@@ -6,14 +7,31 @@ import SplashScreen from "../screens/SplashScreen";
 import "./App.css";
 
 const App = (props) => {
+  const [userSettings, setUserSettings] = useState({});
+
+  useEffect(() => {
+    const userSettings = JSON.parse(localStorage.getItem("settings"));
+    if (userSettings === null) return;
+    setUserSettings(userSettings);
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<SplashScreen />} />
-          <Route path="/roulette" element={<RecipeRouletteScreen />} />
-          <Route path="/mealplans" element={<MealPlansScreen />} />
-          <Route path="/settings" element={<SettingsScreen />} />
+          <Route
+            path="/roulette"
+            element={<RecipeRouletteScreen userSettings={userSettings} />}
+          />
+          <Route
+            path="/mealplans"
+            element={<MealPlansScreen userSettings={userSettings} />}
+          />
+          <Route
+            path="/settings"
+            element={<SettingsScreen setUserSettings={setUserSettings} />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
