@@ -65,10 +65,15 @@ const SettingsScreen = (props) => {
       setIntolerances([...intolerances.filter((d) => d !== value)]);
     }
   };
+
   const handleFormSave = (e) => {
     localStorage.setItem(
       "settings",
-      JSON.stringify({ numberOfRecipes, diets, intolerances })
+      JSON.stringify({
+        numberOfRecipes,
+        diets,
+        intolerances,
+      })
     );
     props.setUserSettings({ numberOfRecipes, diets, intolerances });
     navigate("/");
@@ -93,6 +98,7 @@ const SettingsScreen = (props) => {
                     <Form.Input
                       type="number"
                       value={numberOfRecipes}
+                      min="0"
                       max="7"
                       onChange={(e) => setNumberOfRecipes(e.target.value * 1)}
                     />
