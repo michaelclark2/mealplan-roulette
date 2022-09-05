@@ -85,30 +85,41 @@ const SettingsScreen = (props) => {
         <Heading p={3} textSize={1} textTransform="uppercase">
           Settings
         </Heading>
-        <Button onClick={handleFormSave}>Save</Button>
+        <Button color="primary" onClick={handleFormSave}>
+          Save
+        </Button>
+        <Button color="primary" onClick={() => navigate("/")}>
+          Cancel
+        </Button>
       </Hero.Header>
       <Hero.Body alignItems="start">
         <Container>
           <Columns justifyContent="center">
             <Columns.Column size="three-fifths">
               <Box>
-                <Form.Field className="is-horizontal">
-                  <Form.Label mr="4">Number of Recipes in Meal Plan</Form.Label>
-                  <Form.Control>
-                    <Form.Input
-                      type="number"
-                      value={numberOfRecipes}
-                      min="0"
-                      max="7"
-                      onChange={(e) => setNumberOfRecipes(e.target.value * 1)}
-                    />
-                  </Form.Control>
+                <Form.Field align="center" size="medium" horizontal>
+                  <Form.Label>
+                    <Form.Field.Label>
+                      Number of Recipes in Meal Plan
+                    </Form.Field.Label>
+                  </Form.Label>
+                  <Form.Field.Body>
+                    <Form.Control>
+                      <Form.Input
+                        type="number"
+                        value={numberOfRecipes}
+                        min="0"
+                        max="7"
+                        onChange={(e) => setNumberOfRecipes(e.target.value * 1)}
+                      />
+                    </Form.Control>
+                  </Form.Field.Body>
                 </Form.Field>
               </Box>
             </Columns.Column>
             <Columns.Column size="three-fifths">
               <Box>
-                <Form.Field>
+                <Form.Field size="medium">
                   <Form.Label>Diet Filters</Form.Label>
                   <Form.Control>
                     {SPOONACULAR_DIET_CHOICES.map((choice) => {
@@ -129,7 +140,7 @@ const SettingsScreen = (props) => {
             </Columns.Column>
             <Columns.Column size="three-fifths">
               <Box>
-                <Form.Field>
+                <Form.Field size="medium">
                   <Form.Label>Allergy Filters</Form.Label>
                   <Form.Control>
                     {SPOONACULAR_ALLERGY_CHOICES.map((choice) => (
