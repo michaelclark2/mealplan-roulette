@@ -20,15 +20,32 @@ const SPOONACULAR_DIET_CHOICES = [
   ["paleo", "Paleo"],
 ];
 
+const SPOONACULAR_ALLERGY_CHOICES = [
+  ["dairy", "Dairy"],
+  ["egg", "Egg"],
+  ["gluten", "Gluten"],
+  ["grain", "Grain"],
+  ["peanut", "Peanut"],
+  ["tree nut", "Tree Nut"],
+  ["seafood", "Seafood"],
+  ["shellfish", "Shellfish"],
+  ["sesame", "Sesame"],
+  ["soy", "Soy"],
+  ["sulfite", "Sulfite"],
+  ["wheat", "wheat"],
+];
+
 const SettingsScreen = (props) => {
   const [numberOfRecipes, setNumberOfRecipes] = useState(4);
   const [diets, setDiets] = useState([]);
+  const [intolerances, setIntolerances] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const userSettings = JSON.parse(localStorage.getItem("settings"));
     setNumberOfRecipes(userSettings?.numberOfRecipes);
     setDiets(userSettings?.diets);
+    setIntolerances(userSettings?.intolerances);
   }, []);
 
   const handleDietChange = (e) => {
@@ -40,12 +57,20 @@ const SettingsScreen = (props) => {
     }
   };
 
+  const handleAllergyChange = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setIntolerances([...intolerances.filter((d) => d !== value), value]);
+    } else {
+      setIntolerances([...intolerances.filter((d) => d !== value)]);
+    }
+  };
   const handleFormSave = (e) => {
     localStorage.setItem(
       "settings",
-      JSON.stringify({ numberOfRecipes, diets })
+      JSON.stringify({ numberOfRecipes, diets, intolerances })
     );
-    props.setUserSettings({ numberOfRecipes, diets });
+    props.setUserSettings({ numberOfRecipes, diets, intolerances });
     navigate("/");
   };
 
@@ -92,6 +117,25 @@ const SettingsScreen = (props) => {
                         </Form.Checkbox>
                       );
                     })}
+                  </Form.Control>
+                </Form.Field>
+              </Box>
+            </Columns.Column>
+            <Columns.Column size="three-fifths">
+              <Box>
+                <Form.Field>
+                  <Form.Label>Allergy Filters</Form.Label>
+                  <Form.Control>
+                    {SPOONACULAR_ALLERGY_CHOICES.map((choice) => (
+                      <Form.Checkbox
+                        checked={intolerances.includes(choice[0])}
+                        m="1"
+                        value={choice[0]}
+                        onChange={handleAllergyChange}
+                      >
+                        {choice[1]}
+                      </Form.Checkbox>
+                    ))}
                   </Form.Control>
                 </Form.Field>
               </Box>

@@ -7,6 +7,7 @@ const getRandomRecipeUrl = (numberOfRecipes, userSettings) => {
     sort: "random",
     type: "main course",
     diet: userSettings?.diets?.join(",").toString(),
+    intolerances: userSettings?.intolerances?.join(",").toString(),
   };
   const params = {
     apiKey: constants.SPOONACULAR_APIKEY,
