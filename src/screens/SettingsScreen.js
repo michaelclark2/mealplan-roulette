@@ -43,9 +43,11 @@ const SettingsScreen = (props) => {
 
   useEffect(() => {
     const userSettings = JSON.parse(localStorage.getItem("settings"));
-    setNumberOfRecipes(userSettings?.numberOfRecipes);
-    setDiets(userSettings?.diets);
-    setIntolerances(userSettings?.intolerances);
+    if (userSettings !== null) {
+      setNumberOfRecipes(userSettings?.numberOfRecipes);
+      setDiets(userSettings?.diets);
+      setIntolerances(userSettings?.intolerances);
+    }
   }, []);
 
   const handleDietChange = (e) => {

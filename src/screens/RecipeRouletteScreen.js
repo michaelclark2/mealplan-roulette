@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -18,24 +18,35 @@ const RecipeRouletteScreen = (props) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const { userSettings } = props;
 
+  useEffect(() => {
+    const recipes = JSON.parse(sessionStorage.getItem("recipes")) || [];
+    const pinnedRecipes =
+      JSON.parse(sessionStorage.getItem("pinnedRecipes")) || [];
+    setRecipes(recipes);
+    setPinnedRecipes(pinnedRecipes);
+  }, []);
+
   if (!userSettings || userSettings.numberOfRecipes === undefined)
     return <Navigate to="/" />;
 
   const pinRecipe = (recipe) => {
     recipes.splice(recipes.indexOf(recipe), 1);
+    const filteredRecipes = pinnedRecipes.filter((r) => r.id !== recipe.id);
 
     setRecipes(recipes);
-    setPinnedRecipes([
-      ...pinnedRecipes.filter((r) => r.id !== recipe.id),
-      recipe,
-    ]);
+    setPinnedRecipes([...filteredRecipes, recipe]);
+
+    setSessionStorage(recipes, [...filteredRecipes, recipe]);
   };
 
   const unPinRecipe = (recipe) => {
     pinnedRecipes.splice(pinnedRecipes.indexOf(recipe), 1);
+    const filteredRecipes = recipes.filter((r) => r.id !== recipe.id);
 
     setPinnedRecipes(pinnedRecipes);
-    setRecipes([...recipes.filter((r) => r.id !== recipe.id), recipe]);
+    setRecipes([...filteredRecipes, recipe]);
+
+    setSessionStorage([...filteredRecipes, recipe], pinnedRecipes);
   };
 
   const togglePinRecipe = (recipeId) => {
@@ -52,6 +63,11 @@ const RecipeRouletteScreen = (props) => {
     }
   };
 
+  const setSessionStorage = (recipes, pinnedRecipes) => {
+    sessionStorage.setItem("recipes", JSON.stringify(recipes));
+    sessionStorage.setItem("pinnedRecipes", JSON.stringify(pinnedRecipes));
+  };
+
   const getRecipes = () => {
     setIsSpinning(true);
     setRecipes([]);
@@ -59,7 +75,10 @@ const RecipeRouletteScreen = (props) => {
       userSettings?.numberOfRecipes - pinnedRecipes.length,
       userSettings
     )
-      .then((recipes) => setRecipes(recipes))
+      .then((recipes) => {
+        setRecipes(recipes);
+        setSessionStorage(recipes, pinnedRecipes);
+      })
       .catch((err) => {
         console.error(err);
         // TODO: add error alert to dom
