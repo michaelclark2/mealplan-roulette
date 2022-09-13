@@ -118,6 +118,9 @@ const RecipeRouletteScreen = (props) => {
           Meal Plan Roulette
         </Heading>
 
+        <Button color="primary" renderAs={Link} to="/mealplans">
+          My Saved Plans
+        </Button>
         <Button
           color="primary"
           disabled={isSpinning ? true : false}
