@@ -139,6 +139,11 @@ const RecipeRouletteScreen = (props) => {
               [
                 ...pinnedRecipeCards,
                 ...(isSpinning ? spinnerCards : recipeCards),
+                isSpinning ? null : (
+                  <Columns.Column size="full" textAlign="center">
+                    <Button color="primary">Save</Button>
+                  </Columns.Column>
+                ),
               ]
             ) : isSpinning ? (
               spinnerCards
