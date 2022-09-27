@@ -1,14 +1,13 @@
 import React from "react";
 import { Box, Button, Columns, Heading } from "react-bulma-components";
 
-const MealPlanCard = (props) => {
-  const mealPlan = { createdAt: Date.now(), recipes: [1, 2, 3, 4] };
+const MealPlanCard = ({ plan }) => {
   return (
     <Box>
       <Columns className="is-mobile">
         <Columns.Column className="is-narrow">
           <Heading>
-            {new Date(mealPlan.createdAt).toLocaleDateString("en-us", {
+            {new Date(plan.createdAt).toLocaleDateString("en-us", {
               weekday: "short",
               month: "numeric",
               day: "numeric",
@@ -21,15 +20,15 @@ const MealPlanCard = (props) => {
         </Columns.Column>
       </Columns>
       <ul className="is-flex-desktop is-align-items-center">
-        {mealPlan.recipes.map((x) => (
+        {plan.recipes.map((recipe) => (
           <li className="is-block-desktop m-0">
             <Heading
               renderAs="a"
-              href="https://google.com"
+              href={recipe.sourceUrl}
               target="_blank"
               size={5}
             >
-              Chicken Fajitas
+              {recipe.title}
             </Heading>
           </li>
         ))}

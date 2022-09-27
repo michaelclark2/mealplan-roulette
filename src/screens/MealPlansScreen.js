@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Hero,
@@ -10,6 +10,16 @@ import {
 import MealPlanCard from "../components/MealPlanCard/MealPlanCard";
 
 const MealPlansScreen = (props) => {
+  const [mealPlans, setMealPlans] = useState([]);
+
+  useEffect(() => {
+    const savedMealPlans = localStorage.getItem("mealplans");
+    if (savedMealPlans !== null) {
+      const mealPlans = JSON.parse(savedMealPlans);
+      setMealPlans(mealPlans);
+    }
+  }, []);
+
   return (
     <Hero size="fullheight">
       <Hero.Header textAlign="center">
@@ -28,8 +38,8 @@ const MealPlansScreen = (props) => {
         <Container>
           <Columns justifyContent="center">
             <Columns.Column>
-              {[1, 2, 3].map((x) => (
-                <MealPlanCard />
+              {mealPlans.map((plan) => (
+                <MealPlanCard plan={plan} />
               ))}
             </Columns.Column>
           </Columns>
