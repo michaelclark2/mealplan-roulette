@@ -50,7 +50,7 @@ const SettingsScreen = (props) => {
       setDiets(userSettings?.diets);
       setIntolerances(userSettings?.intolerances);
     }
-  }, []);
+  }, [isVisitingForFirstTime]);
 
   const handleDietChange = (e) => {
     const { checked, value } = e.target;
