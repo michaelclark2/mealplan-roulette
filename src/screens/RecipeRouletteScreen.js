@@ -44,9 +44,9 @@ const RecipeRouletteScreen = (props) => {
     const filteredRecipes = recipes.filter((r) => r.id !== recipe.id);
 
     setPinnedRecipes(pinnedRecipes);
-    setRecipes([...filteredRecipes, recipe]);
+    setRecipes([recipe, ...filteredRecipes]);
 
-    setSessionStorage([...filteredRecipes, recipe], pinnedRecipes);
+    setSessionStorage([recipe, ...filteredRecipes], pinnedRecipes);
   };
 
   const togglePinRecipe = (recipeId) => {
