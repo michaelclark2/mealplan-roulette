@@ -18,7 +18,7 @@ const MealPlanRecipeCard = ({ recipe }) => {
   );
 };
 
-const MealPlanCard = ({ plan }) => {
+const MealPlanCard = ({ plan, deleteMealPlan }) => {
   return (
     <Box>
       <Columns className="is-mobile">
@@ -36,7 +36,9 @@ const MealPlanCard = ({ plan }) => {
           </Heading>
         </Columns.Column>
         <Columns.Column className="is-flex" justifyContent="end">
-          <Button color="danger">x</Button>
+          <Button color="danger" onClick={() => deleteMealPlan(plan)}>
+            x
+          </Button>
         </Columns.Column>
       </Columns>
       <ul className="is-flex-desktop is-align-items-start">

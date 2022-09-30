@@ -20,6 +20,17 @@ const MealPlansScreen = (props) => {
     }
   }, []);
 
+  const saveMealPlans = (mealPlans) => {
+    localStorage.setItem("mealplans", JSON.stringify(mealPlans));
+  };
+
+  const deleteMealPlan = (mealPlan) => {
+    const plan = mealPlans.find((p) => p.createdAt === mealPlan.createdAt);
+    const filteredPlans = mealPlans.filter((p) => p != plan);
+    setMealPlans(filteredPlans);
+    saveMealPlans(filteredPlans);
+  };
+
   return (
     <Hero size="fullheight">
       <Hero.Header textAlign="center">
@@ -39,7 +50,7 @@ const MealPlansScreen = (props) => {
           <Columns justifyContent="center">
             <Columns.Column>
               {mealPlans.map((plan) => (
-                <MealPlanCard plan={plan} />
+                <MealPlanCard plan={plan} deleteMealPlan={deleteMealPlan} />
               ))}
             </Columns.Column>
           </Columns>
