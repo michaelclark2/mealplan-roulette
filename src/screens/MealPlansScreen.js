@@ -49,9 +49,15 @@ const MealPlansScreen = (props) => {
         <Container>
           <Columns justifyContent="center">
             <Columns.Column>
-              {mealPlans.map((plan) => (
-                <MealPlanCard plan={plan} deleteMealPlan={deleteMealPlan} />
-              ))}
+              {mealPlans.length ? (
+                mealPlans.map((plan) => (
+                  <MealPlanCard plan={plan} deleteMealPlan={deleteMealPlan} />
+                ))
+              ) : (
+                <Heading textAlign="center">
+                  Spin to start planning your meals
+                </Heading>
+              )}
             </Columns.Column>
           </Columns>
         </Container>
