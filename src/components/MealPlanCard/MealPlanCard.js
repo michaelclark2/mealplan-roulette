@@ -4,7 +4,7 @@ import { Box, Button, Columns, Heading, Image } from "react-bulma-components";
 const MealPlanRecipeCard = ({ recipe }) => {
   return (
     <Box shadowless>
-      <a href={recipe.sourceUrl} target="_blank">
+      <a href={recipe.sourceUrl} target="_blank" rel="noreferrer">
         <Image
           className="mb-2"
           mobile={{ display: "hidden" }}

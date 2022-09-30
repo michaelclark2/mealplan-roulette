@@ -26,7 +26,7 @@ const MealPlansScreen = (props) => {
 
   const deleteMealPlan = (mealPlan) => {
     const plan = mealPlans.find((p) => p.createdAt === mealPlan.createdAt);
-    const filteredPlans = mealPlans.filter((p) => p != plan);
+    const filteredPlans = mealPlans.filter((p) => p !== plan);
     setMealPlans(filteredPlans);
     saveMealPlans(filteredPlans);
   };

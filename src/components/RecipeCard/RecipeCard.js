@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Image,
-  Icon,
-  Heading,
-  Columns,
-  Container,
-} from "react-bulma-components";
+import { Box, Image, Icon, Heading, Columns } from "react-bulma-components";
 import ClipLoader from "react-spinners/ClipLoader";
 import "./RecipeCard.css";
 import { ReactComponent as LockIcon } from "../../assets/icons/lock.svg";
