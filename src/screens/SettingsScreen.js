@@ -32,23 +32,25 @@ const SPOONACULAR_ALLERGY_CHOICES = [
   ["sesame", "Sesame"],
   ["soy", "Soy"],
   ["sulfite", "Sulfite"],
-  ["wheat", "wheat"],
+  ["wheat", "Wheat"],
 ];
 
 const SettingsScreen = (props) => {
-  const [numberOfRecipes, setNumberOfRecipes] = useState(4);
+  const [numberOfRecipes, setNumberOfRecipes] = useState(5);
   const [diets, setDiets] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const navigate = useNavigate();
 
+  const isVisitingForFirstTime = localStorage.getItem("settings") === null;
+
   useEffect(() => {
-    const userSettings = JSON.parse(localStorage.getItem("settings"));
-    if (userSettings !== null) {
+    if (!isVisitingForFirstTime) {
+      const userSettings = JSON.parse(localStorage.getItem("settings"));
       setNumberOfRecipes(userSettings?.numberOfRecipes);
       setDiets(userSettings?.diets);
       setIntolerances(userSettings?.intolerances);
     }
-  }, []);
+  }, [isVisitingForFirstTime]);
 
   const handleDietChange = (e) => {
     const { checked, value } = e.target;
@@ -85,18 +87,28 @@ const SettingsScreen = (props) => {
     <Hero size="fullheight">
       <Hero.Header textAlign="center">
         <Heading p={3} textSize={1} textTransform="uppercase">
-          Settings
+          {isVisitingForFirstTime ? "Meal Plan Roulette" : "Settings"}
         </Heading>
         <Button color="primary" onClick={handleFormSave}>
           Save
         </Button>
-        <Button color="primary" onClick={() => navigate("/")}>
-          Cancel
-        </Button>
+        {isVisitingForFirstTime ? null : (
+          <Button color="primary" onClick={() => navigate("/")}>
+            Cancel
+          </Button>
+        )}
       </Hero.Header>
       <Hero.Body alignItems="start">
         <Container>
           <Columns justifyContent="center">
+            {isVisitingForFirstTime ? (
+              <Columns.Column size="three-fifths">
+                <p>
+                  To begin using Meal Plan Roulette, configure your preferences.
+                  You can always come back later.
+                </p>
+              </Columns.Column>
+            ) : null}
             <Columns.Column size="three-fifths">
               <Box>
                 <Form.Field align="center" size="medium" horizontal>

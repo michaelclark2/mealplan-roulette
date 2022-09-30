@@ -44,9 +44,9 @@ const RecipeRouletteScreen = (props) => {
     const filteredRecipes = recipes.filter((r) => r.id !== recipe.id);
 
     setPinnedRecipes(pinnedRecipes);
-    setRecipes([...filteredRecipes, recipe]);
+    setRecipes([recipe, ...filteredRecipes]);
 
-    setSessionStorage([...filteredRecipes, recipe], pinnedRecipes);
+    setSessionStorage([recipe, ...filteredRecipes], pinnedRecipes);
   };
 
   const togglePinRecipe = (recipeId) => {
@@ -88,6 +88,25 @@ const RecipeRouletteScreen = (props) => {
       });
   };
 
+  const saveMealPlan = () => {
+    const mealPlan = {
+      recipes: [...pinnedRecipes, ...recipes],
+      createdAt: Date.now(),
+    };
+    if (localStorage.getItem("mealplans") === null) {
+      localStorage.setItem("mealplans", JSON.stringify([mealPlan]));
+    } else {
+      const savedMealPlans = JSON.parse(localStorage.getItem("mealplans"));
+      localStorage.setItem(
+        "mealplans",
+        JSON.stringify([...savedMealPlans, mealPlan])
+      );
+    }
+    setRecipes([]);
+    setPinnedRecipes([]);
+    sessionStorage.clear();
+  };
+
   const hasRecipes =
     (recipes && recipes.length) || (pinnedRecipes && pinnedRecipes.length);
 
@@ -118,6 +137,9 @@ const RecipeRouletteScreen = (props) => {
           Meal Plan Roulette
         </Heading>
 
+        <Button color="primary" renderAs={Link} to="/mealplans">
+          My Saved Plans
+        </Button>
         <Button
           color="primary"
           disabled={isSpinning ? true : false}
@@ -136,6 +158,13 @@ const RecipeRouletteScreen = (props) => {
               [
                 ...pinnedRecipeCards,
                 ...(isSpinning ? spinnerCards : recipeCards),
+                isSpinning ? null : (
+                  <Columns.Column size="full" textAlign="center">
+                    <Button color="primary" onClick={saveMealPlan}>
+                      Save
+                    </Button>
+                  </Columns.Column>
+                ),
               ]
             ) : isSpinning ? (
               spinnerCards
