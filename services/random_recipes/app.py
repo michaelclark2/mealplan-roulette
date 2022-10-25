@@ -3,6 +3,9 @@ import requests
 
 def handler(event, context):
     api_key = os.environ["SPOONACULAR_APIKEY"]
+
+    assert event["number"] < 8
+
     params = {
         "apiKey" : api_key,
         "addRecipeInformation": True,
