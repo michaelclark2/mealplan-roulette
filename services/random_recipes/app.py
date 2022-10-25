@@ -2,8 +2,6 @@ import os
 import requests
 
 def handler(event, context):
-    # TODO: use context to read identity from cognito user pools
-
     api_key = os.environ["SPOONACULAR_APIKEY"]
     params = {
         "apiKey" : api_key,
