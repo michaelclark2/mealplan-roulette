@@ -7,7 +7,7 @@ down:
 	docker stop random-recipes
 
 invoke:
-	curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+	curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{"number": 2, "diets": ["vegan"], "intolerances": ["egg", "tree nut"]}'
 
 build:
 	docker build -t random-recipes .
