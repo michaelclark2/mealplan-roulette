@@ -12,7 +12,6 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.4",
-    "spoonacular_api": "https://gitpkg.now.sh/ddsky/spoonacular-api-clients/javascript",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
