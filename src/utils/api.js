@@ -1,36 +1,27 @@
-import constants from "./constants";
-
-const getRandomRecipeUrl = (numberOfRecipes, userSettings) => {
-  const config = {
-    number: numberOfRecipes,
-    addRecipeInformation: true,
-    sort: "random",
-    type: "main course",
-    diet: userSettings?.diets?.join(",").toString(),
-    intolerances: userSettings?.intolerances?.join(",").toString(),
-  };
-  const params = {
-    apiKey: constants.SPOONACULAR_APIKEY,
-    ...config,
-  };
-  const url = new URL(
-    `https://api.spoonacular.com/recipes/complexSearch?${new URLSearchParams(
-      params
-    )}`
-  );
+const getUrlWithParams = (baseURL, params) => {
+  const url = new URL(`${baseURL}?${new URLSearchParams(params)}`);
   return url.toString();
 };
 
 export const getRandomRecipes = (numberOfRecipes, userSettings) => {
+  const baseURL =
+    "https://00s02wyqn0.execute-api.us-east-1.amazonaws.com/default/random-recipes";
+  const params = {
+    number: numberOfRecipes,
+    diet: userSettings?.diets?.join(",").toString(),
+    intolerances: userSettings?.intolerances?.join(",").toString(),
+  };
   return new Promise((resolve, reject) => {
-    fetch(getRandomRecipeUrl(numberOfRecipes, userSettings))
+    fetch(getUrlWithParams(baseURL, params), {
+      method: "POST",
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
         }
         throw new Error(response.status, response.statusText);
       })
-      .then((results) => resolve(results.results))
+      .then((results) => resolve(results))
       .catch((err) => reject(err));
   });
 };
