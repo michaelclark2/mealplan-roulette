@@ -9,6 +9,7 @@ import {
   Form,
 } from "react-bulma-components";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../providers/AuthProvider";
 
 const SPOONACULAR_DIET_CHOICES = [
   ["vegetarian", "Vegetarian"],
@@ -36,21 +37,20 @@ const SPOONACULAR_ALLERGY_CHOICES = [
 ];
 
 const SettingsScreen = (props) => {
-  const [numberOfRecipes, setNumberOfRecipes] = useState(5);
+  const [numberOfRecipes, setNumberOfRecipes] = useState(3);
   const [diets, setDiets] = useState([]);
   const [intolerances, setIntolerances] = useState([]);
   const navigate = useNavigate();
-
-  const isVisitingForFirstTime = localStorage.getItem("settings") === null;
+  const auth = useAuth();
 
   useEffect(() => {
-    if (!isVisitingForFirstTime) {
-      const userSettings = JSON.parse(localStorage.getItem("settings"));
+    if (auth.userSettings != null) {
+      const { userSettings } = auth;
       setNumberOfRecipes(userSettings?.numberOfRecipes);
       setDiets(userSettings?.diets);
       setIntolerances(userSettings?.intolerances);
     }
-  }, [isVisitingForFirstTime]);
+  }, [auth]);
 
   const handleDietChange = (e) => {
     const { checked, value } = e.target;
@@ -79,7 +79,7 @@ const SettingsScreen = (props) => {
         intolerances,
       })
     );
-    props.setUserSettings({ numberOfRecipes, diets, intolerances });
+    auth.setUserSettings({ numberOfRecipes, diets, intolerances });
     navigate("/");
   };
 
@@ -87,35 +87,23 @@ const SettingsScreen = (props) => {
     <Hero size="fullheight">
       <Hero.Header textAlign="center">
         <Heading p={3} textSize={1} textTransform="uppercase">
-          {isVisitingForFirstTime ? "Meal Plan Roulette" : "Settings"}
+          Settings
         </Heading>
         <Button color="primary" onClick={handleFormSave}>
           Save
         </Button>
-        {isVisitingForFirstTime ? null : (
-          <Button color="primary" onClick={() => navigate("/")}>
-            Cancel
-          </Button>
-        )}
+        <Button color="primary" onClick={() => navigate("/")}>
+          Cancel
+        </Button>
       </Hero.Header>
       <Hero.Body alignItems="start">
         <Container>
           <Columns justifyContent="center">
-            {isVisitingForFirstTime ? (
-              <Columns.Column size="three-fifths">
-                <p>
-                  To begin using Meal Plan Roulette, configure your preferences.
-                  You can always come back later.
-                </p>
-              </Columns.Column>
-            ) : null}
             <Columns.Column size="three-fifths">
               <Box>
                 <Form.Field align="center" size="medium" horizontal>
                   <Form.Label>
-                    <Form.Field.Label>
-                      Number of Recipes in Meal Plan
-                    </Form.Field.Label>
+                    <Form.Field.Label>Number of Recipes</Form.Field.Label>
                   </Form.Label>
                   <Form.Field.Body>
                     <Form.Control>

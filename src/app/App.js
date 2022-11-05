@@ -1,39 +1,70 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import AuthProvider, { useAuth } from "../providers/AuthProvider";
+import LoginScreen from "../screens/LoginScreen";
 import MealPlansScreen from "../screens/MealPlansScreen";
 import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import SplashScreen from "../screens/SplashScreen";
 import "./App.css";
 
+// TODO: https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2Fauth.ts
+// add authentication routing, rather than from settings.
+// add user settings during registration
+
+const RequireAuth = ({ children }) => {
+  let auth = useAuth();
+  let location = useLocation();
+
+  if (!auth.user) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
 const App = (props) => {
-  const [userSettings, setUserSettings] = useState({});
-
-  useEffect(() => {
-    const userSettings = JSON.parse(localStorage.getItem("settings"));
-    if (userSettings === null) return;
-    setUserSettings(userSettings);
-  }, []);
-
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<SplashScreen />} />
-          <Route
-            path="/roulette"
-            element={<RecipeRouletteScreen userSettings={userSettings} />}
-          />
-          <Route
-            path="/mealplans"
-            element={<MealPlansScreen userSettings={userSettings} />}
-          />
-          <Route
-            path="/settings"
-            element={<SettingsScreen setUserSettings={setUserSettings} />}
-          />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <RecipeRouletteScreen />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/mealplans"
+              element={
+                <RequireAuth>
+                  <MealPlansScreen />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <RequireAuth>
+                  <SettingsScreen />
+                </RequireAuth>
+              }
+            />
+            <Route path="/login" element={<LoginScreen />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 };

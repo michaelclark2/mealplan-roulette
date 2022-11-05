@@ -6,17 +6,18 @@ import {
   Hero,
   Columns,
 } from "react-bulma-components";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import RecipeCard, {
   RecipeSpinnerCard,
 } from "../components/RecipeCard/RecipeCard";
+import { useAuth } from "../providers/AuthProvider";
 import { getRandomRecipes } from "../utils/api";
 
 const RecipeRouletteScreen = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [pinnedRecipes, setPinnedRecipes] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
-  const { userSettings } = props;
+  const { userSettings } = useAuth();
 
   useEffect(() => {
     const recipes = JSON.parse(sessionStorage.getItem("recipes")) || [];
@@ -25,9 +26,6 @@ const RecipeRouletteScreen = (props) => {
     setRecipes(recipes);
     setPinnedRecipes(pinnedRecipes);
   }, []);
-
-  if (!userSettings || userSettings.numberOfRecipes === undefined)
-    return <Navigate to="/" />;
 
   const pinRecipe = (recipe) => {
     recipes.splice(recipes.indexOf(recipe), 1);
