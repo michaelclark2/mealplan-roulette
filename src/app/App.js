@@ -9,11 +9,11 @@ import AuthProvider, { useAuth } from "../providers/AuthProvider";
 import LoginScreen from "../screens/LoginScreen";
 import MealPlansScreen from "../screens/MealPlansScreen";
 import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import "./App.css";
 
 // TODO: https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2Fauth.ts
-// add authentication routing, rather than from settings.
 // add user settings during registration
 
 const RequireAuth = ({ children }) => {
@@ -62,6 +62,7 @@ const App = (props) => {
               }
             />
             <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
