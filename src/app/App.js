@@ -34,8 +34,8 @@ const RequireAuth = ({ children }) => {
 const App = (props) => {
   return (
     <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route
               path="/"
@@ -63,8 +63,8 @@ const App = (props) => {
             />
             <Route path="/login" element={<LoginScreen />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </div>
   );
 };

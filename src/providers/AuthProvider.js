@@ -1,10 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Cognito from "../utils/aws";
 
 const AuthContext = React.createContext({});
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
+  const [accessToken, setAccessToken] = useState("");
   const [userSettings, setUserSettings] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      Cognito.refreshToken(refreshToken)
+        .then((res) => {
+          const { AccessToken } = res.AuthenticationResult;
+          setAccessToken(AccessToken);
+          navigate("/");
+        })
+        .catch((err) => {
+          navigate("/login", { replace: true });
+        });
+    }
+  }, []);
 
   const signin = (newUser, callback) => {
     setUser(newUser);
