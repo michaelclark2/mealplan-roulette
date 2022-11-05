@@ -19,7 +19,7 @@ const LoginScreen = (props) => {
         <Hero.Body>
           <Button
             onClick={() =>
-              auth.signin({ user: {} }, navigate(from, { replace: true }))
+              auth.signin({ user: {} }, () => navigate(from, { replace: true }))
             }
           >
             Login
