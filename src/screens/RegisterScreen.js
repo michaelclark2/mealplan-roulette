@@ -75,7 +75,7 @@ const RegisterScreen = (props) => {
                             )
                           }
                         >
-                          Login
+                          Create Account
                         </Button>
                       </Card.Footer.Item>
                     </Card.Footer>
