@@ -37,50 +37,48 @@ const LoginScreen = (props) => {
                       <Heading>Login</Heading>
                     </Card.Header.Title>
                   </Card.Header>
-                  <form>
-                    <Card.Content>
-                      <Columns flexDirection="column" alignItems="center">
-                        <Columns.Column size="half">
-                          <Form.Field>
-                            <Form.Label mr={3}>Email</Form.Label>
-                            <Form.Control>
-                              <Form.Input
-                                type="email"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                              />
-                            </Form.Control>
-                          </Form.Field>
-                        </Columns.Column>
-                        <Columns.Column size="half">
-                          <Form.Field>
-                            <Form.Label mr={3}>Password</Form.Label>
-                            <Form.Control>
-                              <Form.Input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                              />
-                            </Form.Control>
-                          </Form.Field>
-                        </Columns.Column>
-                      </Columns>
-                    </Card.Content>
-                    <Card.Footer>
-                      <Card.Footer.Item>
-                        <Button
-                          color="primary"
-                          onClick={() =>
-                            auth.signin({ user: {} }, () =>
-                              navigate(from, { replace: true })
-                            )
-                          }
-                        >
-                          Login
-                        </Button>
-                      </Card.Footer.Item>
-                    </Card.Footer>
-                  </form>
+                  <Card.Content>
+                    <Columns flexDirection="column" alignItems="center">
+                      <Columns.Column size="half">
+                        <Form.Field>
+                          <Form.Label mr={3}>Email</Form.Label>
+                          <Form.Control>
+                            <Form.Input
+                              type="email"
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                            />
+                          </Form.Control>
+                        </Form.Field>
+                      </Columns.Column>
+                      <Columns.Column size="half">
+                        <Form.Field>
+                          <Form.Label mr={3}>Password</Form.Label>
+                          <Form.Control>
+                            <Form.Input
+                              type="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                          </Form.Control>
+                        </Form.Field>
+                      </Columns.Column>
+                    </Columns>
+                  </Card.Content>
+                  <Card.Footer>
+                    <Card.Footer.Item>
+                      <Button
+                        color="primary"
+                        onClick={() =>
+                          auth.signin({ user: { username, password } }, () =>
+                            navigate(from, { replace: true })
+                          )
+                        }
+                      >
+                        Login
+                      </Button>
+                    </Card.Footer.Item>
+                  </Card.Footer>
                 </Card>
               </Columns.Column>
             </Columns>
