@@ -8,7 +8,7 @@ import {
   Form,
   Card,
 } from "react-bulma-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 
 const RegisterScreen = (props) => {
@@ -36,50 +36,57 @@ const RegisterScreen = (props) => {
                       <Heading>Sign Up</Heading>
                     </Card.Header.Title>
                   </Card.Header>
-                  <form>
-                    <Card.Content>
-                      <Columns flexDirection="column" alignItems="center">
-                        <Columns.Column size="half">
-                          <Form.Field>
-                            <Form.Label mr={3}>Email</Form.Label>
-                            <Form.Control>
-                              <Form.Input
-                                type="email"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                              />
-                            </Form.Control>
-                          </Form.Field>
+                  <Card.Content>
+                    <Columns flexDirection="column" alignItems="center">
+                      <Columns.Column size="half">
+                        <Form.Field>
+                          <Form.Label mr={3}>Email</Form.Label>
+                          <Form.Control>
+                            <Form.Input
+                              type="email"
+                              value={username}
+                              onChange={(e) => setUsername(e.target.value)}
+                            />
+                          </Form.Control>
+                        </Form.Field>
+                      </Columns.Column>
+                      <Columns.Column size="half">
+                        <Form.Field>
+                          <Form.Label mr={3}>Password</Form.Label>
+                          <Form.Control>
+                            <Form.Input
+                              type="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                          </Form.Control>
+                        </Form.Field>
+                      </Columns.Column>
+                    </Columns>
+                  </Card.Content>
+                  <Card.Footer>
+                    <Card.Footer.Item>
+                      <Columns flexDirection="column">
+                        <Columns.Column>
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              auth.signup({ username, password }, () =>
+                                navigate("/", { replace: true })
+                              )
+                            }
+                          >
+                            Create Account
+                          </Button>
                         </Columns.Column>
-                        <Columns.Column size="half">
-                          <Form.Field>
-                            <Form.Label mr={3}>Password</Form.Label>
-                            <Form.Control>
-                              <Form.Input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                              />
-                            </Form.Control>
-                          </Form.Field>
+                        <Columns.Column textSize="7">
+                          <Link to="/login">
+                            Already have an account? Log in!
+                          </Link>
                         </Columns.Column>
                       </Columns>
-                    </Card.Content>
-                    <Card.Footer>
-                      <Card.Footer.Item>
-                        <Button
-                          color="primary"
-                          onClick={() =>
-                            auth.signin({ user: {} }, () =>
-                              navigate(from, { replace: true })
-                            )
-                          }
-                        >
-                          Create Account
-                        </Button>
-                      </Card.Footer.Item>
-                    </Card.Footer>
-                  </form>
+                    </Card.Footer.Item>
+                  </Card.Footer>
                 </Card>
               </Columns.Column>
             </Columns>

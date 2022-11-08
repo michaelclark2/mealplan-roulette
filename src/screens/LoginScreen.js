@@ -9,7 +9,7 @@ import {
   Form,
   Card,
 } from "react-bulma-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 
 const LoginScreen = (props) => {
@@ -67,16 +67,23 @@ const LoginScreen = (props) => {
                   </Card.Content>
                   <Card.Footer>
                     <Card.Footer.Item>
-                      <Button
-                        color="primary"
-                        onClick={() =>
-                          auth.signin({ user: { username, password } }, () =>
-                            navigate(from, { replace: true })
-                          )
-                        }
-                      >
-                        Login
-                      </Button>
+                      <Columns flexDirection="column">
+                        <Columns.Column>
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              auth.signin({ username, password }, () =>
+                                navigate(from, { replace: true })
+                              )
+                            }
+                          >
+                            Login
+                          </Button>
+                        </Columns.Column>
+                        <Columns.Column textSize="7">
+                          <Link to="/register">Click here to sign up</Link>
+                        </Columns.Column>
+                      </Columns>
                     </Card.Footer.Item>
                   </Card.Footer>
                 </Card>

@@ -33,39 +33,37 @@ const AuthProvider = ({ children }) => {
   });
 
   const signin = (user, callback) => {
-    setUser(user);
-    setUserSettings(
-      JSON.parse(localStorage.getItem("settings")) || {
-        numberOfRecipes: 5,
-        diets: [],
-        intolerances: [],
-      }
-    );
     const { username, password } = user;
     Cognito.login({ username, password })
       .then((res) => {
         const { RefreshToken, AccessToken } = res.AuthenticationResult;
         localStorage.setItem("refreshToken", RefreshToken);
         setAccessToken(AccessToken);
-        navigate("/");
+        setUserSettings(
+          JSON.parse(localStorage.getItem("settings")) || {
+            numberOfRecipes: 5,
+            diets: [],
+            intolerances: [],
+          }
+        );
+        callback();
       })
       .catch((err) => {
         setError(err);
         console.error(err);
-      })
-      .finally(() => callback());
+      });
   };
 
-  const signup = (userInfo, callback) => {
-    Cognito.signup(userInfo)
+  const signup = (user, callback) => {
+    const { username, password } = user;
+    Cognito.signup({ username, password })
       .then((res) => {
-        navigate("/auth/confirm");
+        callback();
       })
       .catch((err) => {
         setError(err);
         console.error(err);
-      })
-      .finally(() => callback());
+      });
   };
 
   const signout = (callback) => {

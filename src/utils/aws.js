@@ -4,6 +4,7 @@ import {
   InitiateAuthCommand,
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
+import cryptoJs from "crypto-js";
 import CONFIG from "./constants";
 
 const client = new CognitoIdentityProviderClient({
@@ -14,6 +15,18 @@ const client = new CognitoIdentityProviderClient({
   },
 });
 
+const generate_secret_hash = (username) => {
+  const secret = CONFIG.cognito.AWS_COGNITO_APP_CLIENT_SECRET;
+  const clientId = CONFIG.cognito.AWS_COGNITO_APP_CLIENT_ID;
+
+  const hmac = cryptoJs.algo.HMAC.create(cryptoJs.algo.SHA256, secret);
+  hmac.update(username);
+  hmac.update(clientId);
+
+  const hash = hmac.finalize();
+  const hash64 = cryptoJs.enc.Base64.stringify(hash);
+  return hash64;
+};
 class Cognito {
   client = client;
 
@@ -28,22 +41,18 @@ class Cognito {
       AuthParameters: {
         USERNAME: username,
         PASSWORD: password,
+        SECRET_HASH: generate_secret_hash(username),
       },
     });
     return await this.sendCommand(loginCommand);
   }
 
-  async signup({ username, password, street, city, state, zipcode }) {
+  async signup({ username, password }) {
     const signUpCommand = new SignUpCommand({
       ClientId: CONFIG.cognito.AWS_COGNITO_APP_CLIENT_ID,
+      SecretHash: generate_secret_hash(username),
       Username: username,
       Password: password,
-      UserAttributes: [
-        {
-          Name: "address",
-          Value: `${street} ${city}, ${state} ${zipcode}`,
-        },
-      ],
     });
     return await this.sendCommand(signUpCommand);
   }
