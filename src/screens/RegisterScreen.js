@@ -33,6 +33,7 @@ const RegisterScreen = (props) => {
       })
       .catch((err) => {
         console.error(err);
+        console.error({ username });
         setError(err);
       })
       .finally(() => setLoading(false));
