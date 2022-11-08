@@ -7,6 +7,7 @@ import {
   Hero,
   Form,
   Card,
+  Notification,
 } from "react-bulma-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
@@ -14,8 +15,25 @@ import { useAuth } from "../providers/AuthProvider";
 const RegisterScreen = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const auth = useAuth();
   const navigate = useNavigate();
+
+  const handleSignup = (e) => {
+    setLoading(true);
+    auth
+      .signup({ username, password }, () => {
+        navigate("/", { replace: true });
+        setError(null);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      })
+      .finally(() => setLoading(false));
+  };
 
   return (
     <Hero size="fullheight">
@@ -34,6 +52,12 @@ const RegisterScreen = (props) => {
                     </Card.Header.Title>
                   </Card.Header>
                   <Card.Content>
+                    {error ? (
+                      <Notification color="danger">
+                        {error.message}
+                        <Button remove onClick={() => setError(null)} />
+                      </Notification>
+                    ) : null}
                     <Columns flexDirection="column" alignItems="center">
                       <Columns.Column size="half">
                         <Form.Field>
@@ -67,11 +91,8 @@ const RegisterScreen = (props) => {
                         <Columns.Column>
                           <Button
                             color="primary"
-                            onClick={() =>
-                              auth.signup({ username, password }, () =>
-                                navigate("/", { replace: true })
-                              )
-                            }
+                            onClick={handleSignup}
+                            disabled={loading}
                           >
                             Create Account
                           </Button>

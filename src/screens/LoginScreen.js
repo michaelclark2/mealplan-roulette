@@ -17,6 +17,7 @@ const LoginScreen = (props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,7 +27,10 @@ const LoginScreen = (props) => {
   const handleLogin = (e) => {
     setLoading(true);
     auth
-      .signin({ username, password }, () => navigate(from, { replace: true }))
+      .signin({ username, password }, () => {
+        navigate(from, { replace: true });
+        setError(null);
+      })
       .catch((err) => {
         console.error(err);
         setError(err);

@@ -55,15 +55,10 @@ const AuthProvider = ({ children }) => {
 
   const signup = (user, callback) => {
     const { username, password } = user;
-    Cognito.signup({ username, password })
-      .then((res) => {
-        loadUserSettings();
-        callback();
-      })
-      .catch((err) => {
-        setError(err);
-        console.error(err);
-      });
+    return Cognito.signup({ username, password }).then((res) => {
+      loadUserSettings();
+      callback();
+    });
   };
 
   const signout = (callback) => {
