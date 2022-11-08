@@ -1,38 +1,61 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import AuthProvider, { useAuth } from "../providers/AuthProvider";
+import ConfirmationScreen from "../screens/ConfirmationScreen";
+import LoginScreen from "../screens/LoginScreen";
 import MealPlansScreen from "../screens/MealPlansScreen";
 import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import SplashScreen from "../screens/SplashScreen";
 import "./App.css";
 
+// TODO: https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2Fauth.ts
+// add user settings during registration
+
+const RequireAuth = ({ children }) => {
+  let auth = useAuth();
+
+  if (!auth.accessToken) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
 const App = (props) => {
-  const [userSettings, setUserSettings] = useState({});
-
-  useEffect(() => {
-    const userSettings = JSON.parse(localStorage.getItem("settings"));
-    if (userSettings === null) return;
-    setUserSettings(userSettings);
-  }, []);
-
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<SplashScreen />} />
-          <Route
-            path="/roulette"
-            element={<RecipeRouletteScreen userSettings={userSettings} />}
-          />
-          <Route
-            path="/mealplans"
-            element={<MealPlansScreen userSettings={userSettings} />}
-          />
-          <Route
-            path="/settings"
-            element={<SettingsScreen setUserSettings={setUserSettings} />}
-          />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <RecipeRouletteScreen />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/mealplans"
+              element={
+                <RequireAuth>
+                  <MealPlansScreen />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <RequireAuth>
+                  <SettingsScreen />
+                </RequireAuth>
+              }
+            />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/confirm" element={<ConfirmationScreen />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

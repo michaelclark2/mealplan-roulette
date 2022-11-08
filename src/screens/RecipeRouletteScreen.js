@@ -6,17 +6,19 @@ import {
   Hero,
   Columns,
 } from "react-bulma-components";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import RecipeCard, {
   RecipeSpinnerCard,
 } from "../components/RecipeCard/RecipeCard";
+import { useAuth } from "../providers/AuthProvider";
 import { getRandomRecipes } from "../utils/api";
 
 const RecipeRouletteScreen = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [pinnedRecipes, setPinnedRecipes] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
-  const { userSettings } = props;
+  const auth = useAuth();
+  const { userSettings } = auth;
 
   useEffect(() => {
     const recipes = JSON.parse(sessionStorage.getItem("recipes")) || [];
@@ -25,9 +27,6 @@ const RecipeRouletteScreen = (props) => {
     setRecipes(recipes);
     setPinnedRecipes(pinnedRecipes);
   }, []);
-
-  if (!userSettings || userSettings.numberOfRecipes === undefined)
-    return <Navigate to="/" />;
 
   const pinRecipe = (recipe) => {
     recipes.splice(recipes.indexOf(recipe), 1);
@@ -122,13 +121,13 @@ const RecipeRouletteScreen = (props) => {
 
   const recipeCards = recipes.map(makeRecipeCards);
 
-  const spinnerCards = Array(
-    userSettings?.numberOfRecipes - pinnedRecipes.length
-  ).fill(
-    <Columns.Column size="one-quarter">
-      <RecipeSpinnerCard />
-    </Columns.Column>
-  );
+  const spinnerCards = userSettings?.numberOfRecipes
+    ? Array(userSettings?.numberOfRecipes - pinnedRecipes.length).fill(
+        <Columns.Column size="one-quarter">
+          <RecipeSpinnerCard />
+        </Columns.Column>
+      )
+    : [];
 
   return (
     <Hero size="fullheight">
@@ -149,6 +148,9 @@ const RecipeRouletteScreen = (props) => {
         </Button>
         <Button color="primary" renderAs={Link} to="/settings">
           Settings
+        </Button>
+        <Button color="primary" onClick={() => auth.signout()}>
+          Logout
         </Button>
       </Hero.Header>
       <Hero.Body alignItems="start">

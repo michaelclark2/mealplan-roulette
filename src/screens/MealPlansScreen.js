@@ -38,7 +38,7 @@ const MealPlansScreen = (props) => {
           My Meal Plans
         </Heading>
 
-        <Button color="primary" renderAs={Link} to="/roulette">
+        <Button color="primary" renderAs={Link} to="/">
           Spin
         </Button>
         <Button color="primary" renderAs={Link} to="/settings">
