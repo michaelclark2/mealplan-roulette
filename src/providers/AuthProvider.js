@@ -1,39 +1,12 @@
 import { GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import Cognito from "../utils/aws";
 
 const AuthContext = React.createContext({});
 
 const AuthProvider = ({ children }) => {
-  const [error, setError] = useState(null);
   const [accessToken, setAccessToken] = useState("");
   const [userSettings, setUserSettings] = useState({});
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (error) setError(null);
-  }, [error, location.pathname]);
-
-  useEffect(() => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    const username = localStorage.getItem("username");
-    if (refreshToken && accessToken === "") {
-      Cognito.refreshToken(refreshToken, username)
-        .then((res) => {
-          const { AccessToken } = res.AuthenticationResult;
-          setAccessToken(AccessToken);
-          loadUserSettings();
-          navigate("/");
-        })
-        .catch((err) => {
-          console.error(err);
-          navigate("/login");
-        });
-    }
-  }, [localStorage.getItem("refreshToken")]);
 
   const loadUserSettings = () => {
     setUserSettings(
@@ -49,12 +22,14 @@ const AuthProvider = ({ children }) => {
     const { username, password } = user;
     return Cognito.login({ username, password }).then((res) => {
       const { RefreshToken, AccessToken } = res.AuthenticationResult;
-      Cognito.sendCommand(new GetUserCommand({ AccessToken })).then((res) => {
-        localStorage.setItem("refreshToken", RefreshToken);
-        localStorage.setItem("username", res.Username);
-        setAccessToken(AccessToken);
-      });
-      loadUserSettings();
+      return Cognito.sendCommand(new GetUserCommand({ AccessToken })).then(
+        (res) => {
+          localStorage.setItem("refreshToken", RefreshToken);
+          localStorage.setItem("username", res.Username);
+          setAccessToken(AccessToken);
+          loadUserSettings();
+        }
+      );
     });
   };
 
@@ -65,17 +40,33 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const signout = (callback) => {
-    callback();
+  const signout = () => {
+    return Cognito.logout(accessToken).then(() => {
+      setAccessToken("");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("username");
+    });
+  };
+
+  const refresh = (token) => {
+    const username = localStorage.getItem("username");
+    return Cognito.refreshToken(token, username).then((res) => {
+      const { AccessToken } = res.AuthenticationResult;
+      setAccessToken(AccessToken);
+      loadUserSettings();
+    });
   };
 
   const value = {
     accessToken,
+    setAccessToken,
     userSettings,
     setUserSettings,
+    loadUserSettings,
     signin,
     signup,
     signout,
+    refresh,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

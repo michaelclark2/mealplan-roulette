@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Columns,
@@ -9,7 +9,7 @@ import {
   Card,
   Notification,
 } from "react-bulma-components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 
 const LoginScreen = (props) => {
@@ -17,20 +17,31 @@ const LoginScreen = (props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const from = location.state?.from?.pathname || "/";
+  useEffect(() => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken && !auth.accessToken) {
+      auth
+        .refresh(refreshToken)
+        .then(() => {
+          navigate("/");
+        })
+        .catch((err) => {
+          console.error(err);
+          setError(err);
+        });
+    }
+  }, [auth.accessToken, navigate]);
 
   const handleLogin = (e) => {
     setLoading(true);
     auth
       .signin({ username, password })
       .then(() => {
-        navigate(from, { replace: true });
         setError(null);
+        navigate("/");
       })
       .catch((err) => {
         console.error(err);

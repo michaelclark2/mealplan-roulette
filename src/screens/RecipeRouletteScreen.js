@@ -17,7 +17,8 @@ const RecipeRouletteScreen = (props) => {
   const [recipes, setRecipes] = useState([]);
   const [pinnedRecipes, setPinnedRecipes] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
-  const { userSettings } = useAuth();
+  const auth = useAuth();
+  const { userSettings } = auth;
 
   useEffect(() => {
     const recipes = JSON.parse(sessionStorage.getItem("recipes")) || [];
@@ -147,6 +148,9 @@ const RecipeRouletteScreen = (props) => {
         </Button>
         <Button color="primary" renderAs={Link} to="/settings">
           Settings
+        </Button>
+        <Button color="primary" onClick={() => auth.signout()}>
+          Logout
         </Button>
       </Hero.Header>
       <Hero.Body alignItems="start">
