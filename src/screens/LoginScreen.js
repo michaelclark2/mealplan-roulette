@@ -33,10 +33,12 @@ const LoginScreen = (props) => {
           setError(err);
         });
     }
-  }, [auth.accessToken, navigate]);
+  }, [auth.accessToken, auth, navigate]);
 
   const handleLogin = (e) => {
+    e.preventDefault();
     setLoading(true);
+
     auth
       .signin({ username, password })
       .then(() => {
@@ -61,63 +63,68 @@ const LoginScreen = (props) => {
             <Columns justifyContent="center">
               <Columns.Column size="three-fifths">
                 <Card>
-                  <Card.Header backgroundColor="primary">
-                    <Card.Header.Title justifyContent="center">
-                      <Heading>Login</Heading>
-                    </Card.Header.Title>
-                  </Card.Header>
-                  <Card.Content>
-                    {error ? (
-                      <Notification color="danger">
-                        {error.message}
-                        <Button remove onClick={() => setError(null)} />
-                      </Notification>
-                    ) : null}
-                    <Columns flexDirection="column" alignItems="center">
-                      <Columns.Column size="half">
-                        <Form.Field>
-                          <Form.Label mr={3}>Email</Form.Label>
-                          <Form.Control>
-                            <Form.Input
-                              type="email"
-                              value={username}
-                              onChange={(e) => setUsername(e.target.value)}
-                            />
-                          </Form.Control>
-                        </Form.Field>
-                      </Columns.Column>
-                      <Columns.Column size="half">
-                        <Form.Field>
-                          <Form.Label mr={3}>Password</Form.Label>
-                          <Form.Control>
-                            <Form.Input
-                              type="password"
-                              value={password}
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
-                          </Form.Control>
-                        </Form.Field>
-                      </Columns.Column>
-                    </Columns>
-                  </Card.Content>
-                  <Card.Footer>
-                    <Card.Footer.Item>
-                      <Columns flexDirection="column">
-                        <Columns.Column>
-                          <Button
-                            color="primary"
-                            onClick={handleLogin}
-                            disabled={loading}
-                          >
-                            Login
-                          </Button>
+                  <form onSubmit={handleLogin}>
+                    <Card.Header backgroundColor="primary">
+                      <Card.Header.Title justifyContent="center">
+                        <Heading>Login</Heading>
+                      </Card.Header.Title>
+                    </Card.Header>
+                    <Card.Content>
+                      {error ? (
+                        <Notification color="danger">
+                          {error.message}
+                          <Button remove onClick={() => setError(null)} />
+                        </Notification>
+                      ) : null}
+                      <Columns flexDirection="column" alignItems="center">
+                        <Columns.Column size="half">
+                          <Form.Field>
+                            <Form.Label mr={3}>Email</Form.Label>
+                            <Form.Control>
+                              <Form.Input
+                                required
+                                type="email"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                              />
+                            </Form.Control>
+                          </Form.Field>
                         </Columns.Column>
-                        <Columns.Column textSize="7">
-                          <Link to="/register">Click here to sign up</Link>
+                        <Columns.Column size="half">
+                          <Form.Field>
+                            <Form.Label mr={3}>Password</Form.Label>
+                            <Form.Control>
+                              <Form.Input
+                                required
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                              />
+                            </Form.Control>
+                          </Form.Field>
                         </Columns.Column>
                       </Columns>
-                    </Card.Footer.Item>
-                  </Card.Footer>
+                    </Card.Content>
+                    <Card.Footer>
+                      <Card.Footer.Item>
+                        <Columns flexDirection="column">
+                          <Columns.Column>
+                            <Button
+                              type="submit"
+                              color="primary"
+                              onClick={handleLogin}
+                              disabled={loading}
+                            >
+                              Login
+                            </Button>
+                          </Columns.Column>
+                          <Columns.Column textSize="7">
+                            <Link to="/register">Click here to sign up</Link>
+                          </Columns.Column>
+                        </Columns>
+                      </Card.Footer.Item>
+                    </Card.Footer>
+                  </form>
                 </Card>
               </Columns.Column>
             </Columns>
