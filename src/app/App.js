@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthProvider, { useAuth } from "../providers/AuthProvider";
 import ConfirmationScreen from "../screens/ConfirmationScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -19,7 +13,6 @@ import "./App.css";
 
 const RequireAuth = ({ children }) => {
   let auth = useAuth();
-  let location = useLocation();
 
   if (!auth.accessToken) {
     return <Navigate to="/login" replace />;
