@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   Hero,
   Form,
   Card,
+  Notification,
 } from "react-bulma-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
@@ -15,11 +16,24 @@ import { useAuth } from "../providers/AuthProvider";
 const LoginScreen = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || "/";
+
+  const handleLogin = (e) => {
+    setLoading(true);
+    auth
+      .signin({ username, password }, () => navigate(from, { replace: true }))
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      })
+      .finally(() => setLoading(false));
+  };
 
   return (
     <Hero size="fullheight">
@@ -38,6 +52,12 @@ const LoginScreen = (props) => {
                     </Card.Header.Title>
                   </Card.Header>
                   <Card.Content>
+                    {error ? (
+                      <Notification color="danger">
+                        {error.message}
+                        <Button remove onClick={() => setError(null)} />
+                      </Notification>
+                    ) : null}
                     <Columns flexDirection="column" alignItems="center">
                       <Columns.Column size="half">
                         <Form.Field>
@@ -71,11 +91,8 @@ const LoginScreen = (props) => {
                         <Columns.Column>
                           <Button
                             color="primary"
-                            onClick={() =>
-                              auth.signin({ username, password }, () =>
-                                navigate(from, { replace: true })
-                              )
-                            }
+                            onClick={handleLogin}
+                            disabled={loading}
                           >
                             Login
                           </Button>

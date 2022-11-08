@@ -32,32 +32,32 @@ const AuthProvider = ({ children }) => {
     }
   });
 
+  const loadUserSettings = () => {
+    setUserSettings(
+      JSON.parse(localStorage.getItem("settings")) || {
+        numberOfRecipes: 5,
+        diets: [],
+        intolerances: [],
+      }
+    );
+  };
+
   const signin = (user, callback) => {
     const { username, password } = user;
-    Cognito.login({ username, password })
-      .then((res) => {
-        const { RefreshToken, AccessToken } = res.AuthenticationResult;
-        localStorage.setItem("refreshToken", RefreshToken);
-        setAccessToken(AccessToken);
-        setUserSettings(
-          JSON.parse(localStorage.getItem("settings")) || {
-            numberOfRecipes: 5,
-            diets: [],
-            intolerances: [],
-          }
-        );
-        callback();
-      })
-      .catch((err) => {
-        setError(err);
-        console.error(err);
-      });
+    return Cognito.login({ username, password }).then((res) => {
+      const { RefreshToken, AccessToken } = res.AuthenticationResult;
+      localStorage.setItem("refreshToken", RefreshToken);
+      setAccessToken(AccessToken);
+      loadUserSettings();
+      callback();
+    });
   };
 
   const signup = (user, callback) => {
     const { username, password } = user;
     Cognito.signup({ username, password })
       .then((res) => {
+        loadUserSettings();
         callback();
       })
       .catch((err) => {
