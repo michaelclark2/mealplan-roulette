@@ -24,8 +24,9 @@ const RegisterScreen = (props) => {
   const handleSignup = (e) => {
     setLoading(true);
     auth
-      .signup({ username, password }, () => {
-        navigate("/", { replace: true });
+      .signup({ username, password })
+      .then(() => {
+        navigate("/confirm", { replace: true });
         setError(null);
       })
       .catch((err) => {

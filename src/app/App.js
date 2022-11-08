@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import AuthProvider, { useAuth } from "../providers/AuthProvider";
+import ConfirmationScreen from "../screens/ConfirmationScreen";
 import LoginScreen from "../screens/LoginScreen";
 import MealPlansScreen from "../screens/MealPlansScreen";
 import RecipeRouletteScreen from "../screens/RecipeRouletteScreen";
@@ -63,6 +64,7 @@ const App = (props) => {
             />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/confirm" element={<ConfirmationScreen />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
