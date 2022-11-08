@@ -8,7 +8,7 @@ import {
   Form,
   Card,
 } from "react-bulma-components";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/AuthProvider";
 
 const RegisterScreen = (props) => {
@@ -16,9 +16,6 @@ const RegisterScreen = (props) => {
   const [password, setPassword] = useState("");
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const from = location.state?.from?.pathname || "/";
 
   return (
     <Hero size="fullheight">
