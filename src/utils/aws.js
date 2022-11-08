@@ -57,12 +57,13 @@ class Cognito {
     return await this.sendCommand(signUpCommand);
   }
 
-  async refreshToken(token) {
+  async refreshToken(token, username) {
     const refreshTokenCommand = new InitiateAuthCommand({
       ClientId: CONFIG.cognito.AWS_COGNITO_APP_CLIENT_ID,
       AuthFlow: "REFRESH_TOKEN_AUTH",
       AuthParameters: {
         REFRESH_TOKEN: token,
+        SECRET_HASH: generate_secret_hash(username),
       },
     });
     return await this.sendCommand(refreshTokenCommand);

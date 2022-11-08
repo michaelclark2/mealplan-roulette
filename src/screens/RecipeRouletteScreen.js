@@ -120,13 +120,13 @@ const RecipeRouletteScreen = (props) => {
 
   const recipeCards = recipes.map(makeRecipeCards);
 
-  const spinnerCards = Array(
-    userSettings?.numberOfRecipes - pinnedRecipes.length
-  ).fill(
-    <Columns.Column size="one-quarter">
-      <RecipeSpinnerCard />
-    </Columns.Column>
-  );
+  const spinnerCards = userSettings?.numberOfRecipes
+    ? Array(userSettings?.numberOfRecipes - pinnedRecipes.length).fill(
+        <Columns.Column size="one-quarter">
+          <RecipeSpinnerCard />
+        </Columns.Column>
+      )
+    : [];
 
   return (
     <Hero size="fullheight">

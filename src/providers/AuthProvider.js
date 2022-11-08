@@ -1,3 +1,4 @@
+import { GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Cognito from "../utils/aws";
@@ -5,7 +6,6 @@ import Cognito from "../utils/aws";
 const AuthContext = React.createContext({});
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [accessToken, setAccessToken] = useState("");
   const [userSettings, setUserSettings] = useState({});
@@ -19,18 +19,21 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refreshToken");
-    if (refreshToken) {
-      Cognito.refreshToken(refreshToken)
+    const username = localStorage.getItem("username");
+    if (refreshToken && accessToken === "") {
+      Cognito.refreshToken(refreshToken, username)
         .then((res) => {
           const { AccessToken } = res.AuthenticationResult;
           setAccessToken(AccessToken);
+          loadUserSettings();
           navigate("/");
         })
         .catch((err) => {
-          navigate("/login", { replace: true });
+          console.error(err);
+          navigate("/login");
         });
     }
-  });
+  }, [localStorage.getItem("refreshToken")]);
 
   const loadUserSettings = () => {
     setUserSettings(
@@ -42,32 +45,31 @@ const AuthProvider = ({ children }) => {
     );
   };
 
-  const signin = (user, callback) => {
+  const signin = (user) => {
     const { username, password } = user;
     return Cognito.login({ username, password }).then((res) => {
       const { RefreshToken, AccessToken } = res.AuthenticationResult;
-      localStorage.setItem("refreshToken", RefreshToken);
-      setAccessToken(AccessToken);
+      Cognito.sendCommand(new GetUserCommand({ AccessToken })).then((res) => {
+        localStorage.setItem("refreshToken", RefreshToken);
+        localStorage.setItem("username", res.Username);
+        setAccessToken(AccessToken);
+      });
       loadUserSettings();
-      callback();
     });
   };
 
-  const signup = (user, callback) => {
+  const signup = (user) => {
     const { username, password } = user;
-    return Cognito.signup({ username, password }).then((res) => {
+    return Cognito.signup({ username, password }).then(() => {
       loadUserSettings();
-      callback();
     });
   };
 
   const signout = (callback) => {
-    setUser(null);
     callback();
   };
 
   const value = {
-    user,
     accessToken,
     userSettings,
     setUserSettings,

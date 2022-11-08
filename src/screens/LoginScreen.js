@@ -27,7 +27,8 @@ const LoginScreen = (props) => {
   const handleLogin = (e) => {
     setLoading(true);
     auth
-      .signin({ username, password }, () => {
+      .signin({ username, password })
+      .then(() => {
         navigate(from, { replace: true });
         setError(null);
       })
