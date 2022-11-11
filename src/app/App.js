@@ -8,9 +8,6 @@ import RegisterScreen from "../screens/RegisterScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import "./App.css";
 
-// TODO: https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth?file=src%2Fauth.ts
-// add user settings during registration
-
 const RequireAuth = ({ children }) => {
   let auth = useAuth();
 
