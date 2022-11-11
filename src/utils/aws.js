@@ -1,5 +1,6 @@
 import {
   CognitoIdentityProviderClient,
+  GetUserCommand,
   GlobalSignOutCommand,
   InitiateAuthCommand,
   SignUpCommand,
@@ -32,6 +33,11 @@ class Cognito {
 
   async sendCommand(command) {
     return await this.client.send(command);
+  }
+
+  async getUser(AccessToken) {
+    const getUserInfoCommand = new GetUserCommand({ AccessToken });
+    return await this.sendCommand(getUserInfoCommand);
   }
 
   async login({ username, password }) {

@@ -1,4 +1,3 @@
-import { GetUserCommand } from "@aws-sdk/client-cognito-identity-provider";
 import React, { useState } from "react";
 import Cognito from "../utils/aws";
 
@@ -22,14 +21,12 @@ const AuthProvider = ({ children }) => {
     const { username, password } = user;
     return Cognito.login({ username, password }).then((res) => {
       const { RefreshToken, AccessToken } = res.AuthenticationResult;
-      return Cognito.sendCommand(new GetUserCommand({ AccessToken })).then(
-        (res) => {
-          localStorage.setItem("refreshToken", RefreshToken);
-          localStorage.setItem("username", res.Username);
-          setAccessToken(AccessToken);
-          loadUserSettings();
-        }
-      );
+      return Cognito.getUser(AccessToken).then((res) => {
+        localStorage.setItem("refreshToken", RefreshToken);
+        localStorage.setItem("username", res.Username);
+        setAccessToken(AccessToken);
+        loadUserSettings();
+      });
     });
   };
 
